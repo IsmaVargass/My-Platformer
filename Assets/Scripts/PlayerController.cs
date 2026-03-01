@@ -57,11 +57,14 @@ public class PlayerController : MonoBehaviour
             jumpCount = 0; 
         }
 
-        // Ajuste Visual Dinámico: Mueve el dibujo respecto al colisionador
-        // Esto permite bajar el dibujo si el colisionador es muy grande
-        foreach (SpriteRenderer sr in GetComponentsInChildren<SpriteRenderer>())
+        // Ajuste Visual: Mueve los hijos (gráficos) respecto al padre (físicas)
+        foreach (Transform child in transform)
         {
-            sr.transform.localPosition = new Vector3(0, visualOffsetY, 0);
+            // No movemos el groundCheck ni otros objetos técnicos, solo los gráficos
+            if (child.name != "Ground Check" && child.GetComponent<SpriteRenderer>() != null)
+            {
+                child.localPosition = new Vector3(0, visualOffsetY, 0);
+            }
         }
 
         if (controlmode == Controls.pc && !isPaused)
