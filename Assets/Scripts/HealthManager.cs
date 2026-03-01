@@ -23,7 +23,7 @@ public class HealthManager : MonoBehaviour
 
     private void Start()
     {
-        Player = GameObject.FindObjectOfType<PlayerController>().gameObject;
+        Player = Object.FindFirstObjectByType<PlayerController>().gameObject;
         currentHealth = MaxHealth;
         DisplayHearts();
     }

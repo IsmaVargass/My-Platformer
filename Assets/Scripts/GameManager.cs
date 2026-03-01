@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
     public void FindTotalPickups()
     {
 
-        pickup[] pickups = GameObject.FindObjectsOfType<pickup>();
+        pickup[] pickups = Object.FindObjectsByType<pickup>(FindObjectsSortMode.None);
 
         foreach (pickup pickupObject in pickups)
         {
