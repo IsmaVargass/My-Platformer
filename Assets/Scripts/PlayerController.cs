@@ -18,34 +18,21 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
     private bool isGroundedBool = false;
-    private bool canDoubleJump = false;
+    private int jumpCount = 0;
+    public int maxJumps = 2;
 
     public Animator playeranim;
-
     public Controls controlmode;
-   
-
     private float moveX;
     public bool isPaused = false;
 
     public ParticleSystem footsteps;
     private ParticleSystem.EmissionModule footEmissions;
-
     public ParticleSystem ImpactEffect;
     private bool wasonGround;
 
-
-   // public GameObject projectile;
-   // public Transform firePoint;
-
-    public float fireRate = 0.5f; // Time between each shot
-    private float nextFireTime = 0f; // Time of the next allowed shot
-
-
-    
-
-
-
+    public float fireRate = 0.5f;
+    private float nextFireTime = 0f;
 
     private void Start()
     {
@@ -56,8 +43,6 @@ public class PlayerController : MonoBehaviour
         {
             UIManager.instance.EnableMobileControls();
         }
-
-
     }
 
     private void Update()
@@ -66,26 +51,13 @@ public class PlayerController : MonoBehaviour
 
         if (isGroundedBool)
         {
-            canDoubleJump = true; // Reset double jump when grounded
-
-            if (controlmode == Controls.pc)
-            {
-                moveX = Input.GetAxis("Horizontal");
-            }
-
-
-            if (Input.GetButtonDown("Jump"))
-            {
-                Jump(jumpForce);
-            }
+            jumpCount = 0; // Reset jumps when on ground
         }
-        else
+
+        if (Input.GetButtonDown("Jump") && jumpCount < maxJumps)
         {
-            if (canDoubleJump && Input.GetButtonDown("Jump"))
-            {
-                Jump(doubleJumpForce);
-                canDoubleJump = false; // Disable double jump until grounded again
-            }
+            Jump(jumpCount == 0 ? jumpForce : doubleJumpForce);
+            jumpCount++;
         }
 
         if (!isPaused)
