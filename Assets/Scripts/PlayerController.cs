@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     public float fireRate = 0.5f;
     private float nextFireTime = 0f;
 
-    private Vector3 baseScale = new Vector3(5.0f, 5.0f, 5.0f);
+    private Vector3 baseScale = new Vector3(3.0f, 3.0f, 3.0f);
     private int jumpCount = 0;
     public int maxJumps = 2;
 
