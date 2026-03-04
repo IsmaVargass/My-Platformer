@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,11 +15,27 @@ public class UIManager : MonoBehaviour
 
     public PlayerController playerController;
     public Slider jumpSlider;
-
+    public GameObject coinWarning;
 
     private void Awake()
     {
         instance = this;
+    }
+
+    public void ShowCoinWarning()
+    {
+        if (coinWarning != null)
+        {
+            StopCoroutine("HideCoinWarning");
+            coinWarning.SetActive(true);
+            StartCoroutine("HideCoinWarning");
+        }
+    }
+
+    private IEnumerator HideCoinWarning()
+    {
+        yield return new WaitForSeconds(2.5f);
+        if (coinWarning != null) coinWarning.SetActive(false);
     }
 
     public void DisableMobileControls()

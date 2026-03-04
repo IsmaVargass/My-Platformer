@@ -10,7 +10,15 @@ public class ExitTrigger : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            StartCoroutine("LevelExit");
+            if (GameManager.instance.HasCollectedAllCoins())
+            {
+                StartCoroutine("LevelExit");
+            }
+            else
+            {
+                Debug.Log("¡Aún no has recogido todas las monedas!");
+                UIManager.instance.ShowCoinWarning();
+            }
         }
     }
 

@@ -58,6 +58,11 @@ public class GameManager : MonoBehaviour
         UpdateGUI();
     }
 
+    public bool HasCollectedAllCoins()
+    {
+        return coinCount >= totalCoins;
+    }
+
     private void UpdateGUI()
     {
         coinText.text = coinCount.ToString();
