@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     //player reference
 
     public PlayerController playerController;
+    public Slider jumpSlider;
 
 
     private void Awake()

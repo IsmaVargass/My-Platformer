@@ -19,7 +19,15 @@ public class pickup : MonoBehaviour
            
                 Instantiate(PickupEffect, transform.position, Quaternion.identity);
 
-                Destroy(this.gameObject,0.2f);
+                // Play coin sound from player's AudioSource before destroying
+                // Usamos GetComponentInParent por si el collider está en un objeto hijo
+                PlayerController player = collision.GetComponentInParent<PlayerController>();
+                if (player != null && player.coinSound != null)
+                {
+                    player.coinSound.Play();
+                }
+
+                Destroy(this.gameObject,0.1f);
                 
             }
             
@@ -33,7 +41,14 @@ public class pickup : MonoBehaviour
             
                 Instantiate(PickupEffect, transform.position, Quaternion.identity);
 
-                Destroy(this.gameObject, 0.2f);
+                // Play coin/gem sound from player's AudioSource before destroying
+                PlayerController player = collision.GetComponentInParent<PlayerController>();
+                if (player != null && player.coinSound != null)
+                {
+                    player.coinSound.Play();
+                }
+
+                Destroy(this.gameObject, 0.1f);
 
             }
 

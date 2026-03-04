@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public float doubleJumpForce = 8f;
     public LayerMask groundLayer;
     public Transform groundCheck;
+    public float groundCheckRadius = 0.4f; // Aumentado para máxima fiabilidad
 
     private Rigidbody2D rb;
     private bool isGroundedBool = false;
@@ -30,9 +31,18 @@ public class PlayerController : MonoBehaviour
     public float fireRate = 0.5f;
     private float nextFireTime = 0f;
 
+    [Header("Audio")]
+    public AudioSource levelBGM;
+    public AudioSource jumpSound;
+    public AudioSource landSound;
+    public AudioSource walkSound;
+    public AudioSource coinSound;
+
     private Vector3 baseScale = new Vector3(3.0f, 3.0f, 3.0f);
     private int jumpCount = 0;
     public int maxJumps = 2;
+    private float lastJumpTime;
+    private float jumpCooldown = 0.15f;
 
     [Header("Ajuste Visual")]
     public float visualOffsetY = 0f; // Si el muñeco vuela, pon aquí un número negativo (ej: -0.5)
@@ -52,9 +62,20 @@ public class PlayerController : MonoBehaviour
     {
         isGroundedBool = IsGrounded();
 
-        if (isGroundedBool)
+        if (isGroundedBool && Time.time > lastJumpTime + jumpCooldown)
         {
-            jumpCount = 0; 
+            if (jumpCount > 0)
+            {
+                jumpCount = 0;
+                if (playeranim != null) playeranim.ResetTrigger("jump");
+            }
+        }
+
+        // Actualizamos la barra de saltos en el UI
+        if (UIManager.instance != null && UIManager.instance.jumpSlider != null)
+        {
+            UIManager.instance.jumpSlider.maxValue = maxJumps;
+            UIManager.instance.jumpSlider.value = maxJumps - jumpCount;
         }
 
         // Ajuste Visual: Mueve los hijos (gráficos) respecto al padre (físicas)
@@ -92,7 +113,9 @@ public class PlayerController : MonoBehaviour
 
         if (!wasonGround && isGroundedBool)
         {
-            if (ImpactEffect != null)
+            if (landSound != null) landSound.Play();
+
+            if (ImpactEffect != null && groundCheck != null)
             {
                 ImpactEffect.gameObject.SetActive(true);
                 ImpactEffect.Stop();
@@ -106,7 +129,9 @@ public class PlayerController : MonoBehaviour
 
     private void HandleJump()
     {
-        if (isGroundedBool || jumpCount < maxJumps)
+        // Eliminamos el bypass de isGroundedBool para que maxJumps sea la ley absoluta.
+        // Mientras estemos en el aire o saltando, jumpCount limitará los saltos.
+        if (jumpCount < maxJumps)
         {
             float force = (jumpCount == 0) ? jumpForce : doubleJumpForce;
             Jump(force);
@@ -119,13 +144,23 @@ public class PlayerController : MonoBehaviour
         if (playeranim == null) return;
         
         bool isMoving = Mathf.Abs(moveX) > 0.1f;
-        playeranim.SetBool("run", isMoving && isGroundedBool);
-
+        
+        // El personaje ahora anima el correr siempre que se mueva, 
+        // y solo detiene la animación si está quieto O ha pasado mucho tiempo en el aire
+        playeranim.SetBool("run", isMoving);
+        
         if (footsteps != null)
         {
             var emission = footsteps.emission;
-            emission.rateOverTime = (isMoving && isGroundedBool) ? 35f : 0f;
+            bool shouldWalk = isMoving && isGroundedBool;
+            emission.rateOverTime = shouldWalk ? 35f : 0f;
             footsteps.transform.position = groundCheck.position;
+
+            if (walkSound != null)
+            {
+                if (shouldWalk && !walkSound.isPlaying) walkSound.Play();
+                else if (!shouldWalk && walkSound.isPlaying) walkSound.Stop();
+            }
         }
     }
 
@@ -146,19 +181,43 @@ public class PlayerController : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
         rb.AddForce(Vector2.up * force, ForceMode2D.Impulse);
-        if (playeranim != null) playeranim.SetTrigger("jump");
+        if (playeranim != null) 
+        {
+            playeranim.ResetTrigger("jump");
+            playeranim.SetTrigger("jump");
+        }
+        if (jumpSound != null) jumpSound.Play();
+        lastJumpTime = Time.time;
     }
 
     private bool IsGrounded()
     {
-        // Rayo MUCHO más largo para detectar el suelo incluso si el muñeco vuela
-        float rayLength = 1.0f; 
-        Vector2 rayOrigin = groundCheck.position;
+        if (groundCheck == null) return false;
+
+        // QUITAMOS groundLayer: Ahora detectará CUALQUIER objeto que tenga un collider
+        // Esto soluciona el problema de si el usuario se olvidó de poner la "Layer" de suelo.
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, groundCheckRadius);
         
-        RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down, rayLength, groundLayer);
-        Debug.DrawRay(rayOrigin, Vector2.down * rayLength, hit.collider != null ? Color.green : Color.red);
+        foreach (var col in colliders)
+        {
+            // Ignoramos triggers (como monedas) y cualquier objeto que sea parte del jugador
+            if (!col.isTrigger && !col.transform.IsChildOf(transform) && col.gameObject != gameObject)
+            {
+                return true;
+            }
+        }
         
-        return hit.collider != null;
+        return false;
+    }
+
+    // Dibujamos el círculo en el editor para que el usuario pueda ajustarlo visualmente
+    private void OnDrawGizmosSelected()
+    {
+        if (groundCheck != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(groundCheck.position, groundCheckRadius);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
