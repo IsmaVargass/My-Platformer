@@ -3,10 +3,22 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    // Carga el primer nivel (asegúrate de que sea el índice 1 en Build Settings)
+    [SerializeField] private GameObject controlsPanel;
+
+    // Carga el nivel principal por su nombre exacto
     public void PlayGame()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("Level Recuperado");
+    }
+
+    public void OpenControls()
+    {
+        if (controlsPanel != null) controlsPanel.SetActive(true);
+    }
+
+    public void CloseControls()
+    {
+        if (controlsPanel != null) controlsPanel.SetActive(false);
     }
 
     // Cierra el juego
