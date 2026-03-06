@@ -32,19 +32,29 @@ public class HealthManager : MonoBehaviour
 
     public void HurtPlayer()
     {
-
         if (currentHealth > 0)
         {
-            currentHealth--;
+            // Restamos 2 para quitar un corazón completo (o 1 para medio corazón)
+            // Según tu lógica original, currentHealth=6 son 3 corazones.
+            currentHealth -= 2; 
+            if (currentHealth < 0) currentHealth = 0;
+            
             DisplayHearts();
-            //Player.GetComponent<PlayerController>().Knockback();
+
+            // Llamamos al efecto visual de parpadeo rojo
+            if (UIManager.instance != null)
+            {
+                UIManager.instance.TriggerDamageFlash();
+            }
         }
-        else if (currentHealth <= 0)
+
+        if (currentHealth <= 0)
         {
             GameManager.instance.Death();
         }
         
-        Instantiate(damageEffect, Player.transform.position, Quaternion.identity);
+        if (damageEffect != null)
+            Instantiate(damageEffect, Player.transform.position, Quaternion.identity);
     }
 
     public void DisplayHearts()

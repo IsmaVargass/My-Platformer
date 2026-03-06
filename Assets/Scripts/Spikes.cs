@@ -7,10 +7,10 @@ public class Spikes : MonoBehaviour
         // Comprobamos si lo que ha tocado el pincho es el jugador
         if (collision.CompareTag("Player"))
         {
-            if (GameManager.instance != null)
+            if (HealthManager.instance != null)
             {
-                // Llamamos directamente a la muerte del jugador
-                GameManager.instance.Death();
+                // Ahora resta vida en lugar de matar al instante
+                HealthManager.instance.HurtPlayer();
             }
         }
     }

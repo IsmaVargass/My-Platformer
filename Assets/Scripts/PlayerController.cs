@@ -223,7 +223,25 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "killzone")
-            if (GameManager.instance != null) GameManager.instance.Death();
+        {
+            if (HealthManager.instance != null)
+            {
+                // Quitamos vida al caer
+                HealthManager.instance.HurtPlayer();
+                
+                // Si aún tiene vida, lo devolvemos a una posición segura (el inicio o checkpoint)
+                if (HealthManager.instance.currentHealth > 0)
+                {
+                    transform.position = playerPosition;
+                    rb.linearVelocity = Vector2.zero;
+                }
+            }
+            else if (GameManager.instance != null)
+            {
+                // Fallback si no hay HealthManager
+                GameManager.instance.Death();
+            }
+        }
     }
 
     public void MobileMove(float value)

@@ -17,6 +17,11 @@ public class UIManager : MonoBehaviour
     public Slider jumpSlider;
     public GameObject coinWarning;
 
+    [Header("Damage Effect")]
+    public Image damageFlashImage;
+    public float flashDuration = 0.2f;
+    public Color flashColor = new Color(1, 0, 0, 0.4f);
+
     private void Awake()
     {
         instance = this;
@@ -93,5 +98,28 @@ public class UIManager : MonoBehaviour
         Color currentColor = blackScreen.color;
         float newAlpha = Mathf.MoveTowards(currentColor.a, targetAlpha, fadeSpeed * Time.deltaTime);
         blackScreen.color = new Color(currentColor.r, currentColor.g, currentColor.b, newAlpha);
+    }
+
+    public void TriggerDamageFlash()
+    {
+        if (damageFlashImage != null)
+        {
+            StopCoroutine("DamageFlashRoutine");
+            StartCoroutine("DamageFlashRoutine");
+        }
+    }
+
+    private IEnumerator DamageFlashRoutine()
+    {
+        damageFlashImage.color = flashColor;
+        float elapsed = 0f;
+        while (elapsed < flashDuration)
+        {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Lerp(flashColor.a, 0f, elapsed / flashDuration);
+            damageFlashImage.color = new Color(flashColor.r, flashColor.g, flashColor.b, alpha);
+            yield return null;
+        }
+        damageFlashImage.color = new Color(flashColor.r, flashColor.g, flashColor.b, 0f);
     }
 }
