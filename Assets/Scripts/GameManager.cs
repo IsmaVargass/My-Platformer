@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] TMP_Text leveCompletePanelTitle;
     [SerializeField] TMP_Text levelCompleteCoins;
 
+    [Header("Death Menu")]
+    [SerializeField] private GameObject deathMenuPanel;
+
 
 
 
@@ -125,19 +128,28 @@ public class GameManager : MonoBehaviour
    
     public IEnumerator DeathCoroutine()
     {
-        yield return new WaitForSeconds(1f);
-        playerController.transform.position = playerPosition;
+        // Esperamos a que el fade a negro termine o casi termine
+        yield return new WaitForSeconds(1.5f);
 
-        // Wait for 2 seconds
-        yield return new WaitForSeconds(1f);
-
-        // Check if the game is still over (in case player respawns earlier)
-        if (isGameOver)
+        if (deathMenuPanel != null)
         {
-            SceneManager.LoadScene(1);
-
-            
+            deathMenuPanel.SetActive(true);
         }
+        else
+        {
+            Debug.LogWarning("Death Menu Panel no asignado en GameManager. Reiniciando nivel por defecto.");
+            RestartLevel();
+        }
+    }
+
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 
     public void NextLevel()
