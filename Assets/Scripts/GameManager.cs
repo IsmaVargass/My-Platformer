@@ -8,9 +8,9 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
 
-    [SerializeField] private TMP_Text coinText;
+    public TMP_Text coinText;
 
-    [SerializeField] private PlayerController playerController;
+    public PlayerController playerController;
 
     private int coinCount = 0;
     private int gemCount = 0;
@@ -19,12 +19,12 @@ public class GameManager : MonoBehaviour
 
     //Level Complete
 
-    [SerializeField] GameObject levelCompletePanel;
-    [SerializeField] TMP_Text leveCompletePanelTitle;
-    [SerializeField] TMP_Text levelCompleteCoins;
+    public GameObject levelCompletePanel;
+    public TMP_Text leveCompletePanelTitle;
+    public TMP_Text levelCompleteCoins;
 
     [Header("Death Menu")]
-    [SerializeField] private GameObject deathMenuPanel;
+    public GameObject deathMenuPanel;
 
 
 

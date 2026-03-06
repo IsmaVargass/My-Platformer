@@ -9,10 +9,10 @@ public class HealthManager : MonoBehaviour
     private int MaxHealth = 6;
     public int currentHealth;
 
-    [SerializeField] private Image[] hearts;
-    [SerializeField] private Sprite FullHeartSprite;
-    [SerializeField] private Sprite HalfHeartSprite;
-    [SerializeField] private Sprite EmptyHeartSprite;
+    public Image[] hearts;
+    public Sprite FullHeartSprite;
+    public Sprite HalfHeartSprite;
+    public Sprite EmptyHeartSprite;
 
     private GameObject Player;
 

@@ -9,6 +9,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 07d404ae2f2e9404ab61c78efb374629
   - enabled: 1
+    path: Assets/Scenes/Level Recuperado.unity
+    guid: da0cc9f1cfc4f614e9531990ce5052ac
+  - enabled: 0
     path: Assets/Scenes/Level.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0

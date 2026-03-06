@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
     public int maxJumps = 2;
     private float lastJumpTime;
     private float jumpCooldown = 0.15f;
+    private Vector3 playerPosition;
 
     [Header("Ajuste Visual")]
     public float visualOffsetY = 0f; // Si el muñeco vuela, pon aquí un número negativo (ej: -0.5)
@@ -51,6 +52,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         transform.localScale = baseScale;
+        playerPosition = transform.position;
 
         if (controlmode == Controls.mobile)
         {
