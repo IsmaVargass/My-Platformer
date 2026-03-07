@@ -60,6 +60,15 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        // BLOQUEO ABSOLUTO DURANTE EL TUTORIAL
+        bool isTutorialActive = (GameManager.instance != null && GameManager.instance.tutorialPanel != null && GameManager.instance.tutorialPanel.activeSelf);
+        if (isTutorialActive)
+        {
+            moveX = 0f;
+            if (rb != null) rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
         isGroundedBool = IsGrounded();
 
         if (isGroundedBool && Time.time > lastJumpTime + jumpCooldown)
@@ -87,7 +96,26 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            TogglePause();
+            Debug.Log("[PlayerController] Tecla ESC detectada");
+
+            // No permitir ESC si el tutorial está activo
+            if (GameManager.instance != null && GameManager.instance.tutorialPanel != null && GameManager.instance.tutorialPanel.activeSelf)
+            {
+                Debug.Log("[PlayerController] ESC bloqueado por el Tutorial.");
+                return;
+            }
+            
+            // SI los controles están abiertos, ESC los cierra
+            if (UIManager.instance != null && UIManager.instance.controlsPanel != null && UIManager.instance.controlsPanel.activeSelf)
+            {
+                UIManager.instance.controlsPanel.SetActive(false);
+                // Si el juego NO estaba pausado (raro, pero posible si se abrió sin pausar), no hacemos nada más.
+                // Pero lo normal es que estuviéramos en el Menú de Pausa.
+            }
+            else
+            {
+                TogglePause();
+            }
         }
 
         if (controlmode == Controls.pc && !isPaused)
@@ -171,6 +199,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.instance != null && GameManager.instance.tutorialPanel != null && GameManager.instance.tutorialPanel.activeSelf) return;
         rb.linearVelocity = new Vector2(moveX * moveSpeed, rb.linearVelocity.y);
     }
 
@@ -216,11 +245,30 @@ public class PlayerController : MonoBehaviour
         {
             if (HealthManager.instance != null)
             {
-                HealthManager.instance.HurtPlayer();
-                if (HealthManager.instance.currentHealth > 0)
+                string objName = collision.gameObject.name.ToLower();
+                
+                // Si es el Vacío (nombres comunes), muerte instantánea
+                if (objName.Contains("vacio") || objName.Contains("void") || objName.Contains("fall") || objName.Contains("caida"))
                 {
-                    transform.position = playerPosition;
-                    rb.linearVelocity = Vector2.zero;
+                    Debug.Log("[PlayerController] Caída al vacío detectada.");
+                    HealthManager.instance.KillPlayer();
+                }
+                else
+                {
+                    // Si es otra cosa (como pinchos), quita 2 de vida (UN CORAZÓN ENTERO)
+                    HealthManager.instance.HurtPlayer(2);
+                    
+                    if (HealthManager.instance.currentHealth > 0)
+                    {
+                        // Solo respawn si no ha muerto (si aún tiene vida)
+                        // AÑADIDO: Pequeño empuje hacia atrás para que el impacto se sienta real
+                        Vector2 knockbackDir = (transform.position - collision.transform.position).normalized;
+                        rb.linearVelocity = Vector2.zero;
+                        rb.AddForce(new Vector2(knockbackDir.x * 5f, 5f), ForceMode2D.Impulse);
+                        
+                        // Opcional: Respawn tras un breve retardo si prefieres que vuelva al inicio del salto
+                        // transform.position = playerPosition; 
+                    }
                 }
             }
             else if (GameManager.instance != null)
@@ -230,14 +278,38 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void MobileMove(float value) { moveX = value; }
-    public void MobileJump() { HandleJump(); }
+    public void MobileMove(float value) 
+    { 
+        if (GameManager.instance != null && GameManager.instance.tutorialPanel != null && GameManager.instance.tutorialPanel.activeSelf) return;
+        moveX = value; 
+    }
+    public void MobileJump() 
+    { 
+        if (GameManager.instance != null && GameManager.instance.tutorialPanel != null && GameManager.instance.tutorialPanel.activeSelf) return;
+        HandleJump(); 
+    }
     public void Shoot() { }
     public void TogglePause()
     {
+        if (GameManager.instance != null && GameManager.instance.tutorialPanel != null && GameManager.instance.tutorialPanel.activeSelf) return;
+        
         isPaused = !isPaused;
         Time.timeScale = isPaused ? 0f : 1f;
-        if (UIManager.instance != null) UIManager.instance.TogglePauseMenu(isPaused);
+
+        if (UIManager.instance == null)
+        {
+            Debug.LogWarning("[PlayerController] UIManager.instance es null. Buscando en la escena...");
+            UIManager.instance = Object.FindFirstObjectByType<UIManager>();
+        }
+
+        if (UIManager.instance != null)
+        {
+            UIManager.instance.TogglePauseMenu(isPaused);
+        }
+        else
+        {
+            Debug.LogError("[PlayerController] No se pudo encontrar el UIManager.");
+        }
     }
     public void MobileShoot()
     {

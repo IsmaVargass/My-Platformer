@@ -21,7 +21,7 @@ public class PauseMenu : MonoBehaviour
             controlsButton.onClick.AddListener(OpenControls);
 
         if (quitButton != null)
-            quitButton.onClick.AddListener(QuitToMenu);
+            quitButton.onClick.AddListener(QuitGame);
             
         // Buscar el panel de controles si no está asignado
         if (controlsPanel == null)
@@ -51,14 +51,10 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-    public void QuitToMenu()
+    public void QuitGame()
     {
+        Debug.Log("Saliendo del juego desde el Menú de Pausa...");
         Time.timeScale = 1f;
-        // Intentar cargar por nombre o volver a la escena 0 (que suele ser el menú)
-        if (Application.CanStreamedLevelBeLoaded("Main Menu"))
-            SceneManager.LoadScene("Main Menu");
-        else
-            SceneManager.LoadScene(0);
 
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;

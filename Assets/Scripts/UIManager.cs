@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     public Color flashColor = new Color(1, 0, 0, 0.4f);
 
     public GameObject pauseMenuPanel;
+    public GameObject controlsPanel;
 
     private void Awake()
     {
@@ -39,9 +40,33 @@ public class UIManager : MonoBehaviour
 
     public void TogglePauseMenu(bool show)
     {
+        Debug.Log($"[UIManager] TogglePauseMenu: {show}");
+
+        if (pauseMenuPanel == null)
+        {
+            Debug.LogWarning("[UIManager] pauseMenuPanel no asignado. Buscando...");
+            GameObject canvas = GameObject.Find("Canvas");
+            if (canvas != null)
+            {
+                Transform found = canvas.transform.Find("PauseMenu");
+                if (found != null) pauseMenuPanel = found.gameObject;
+            }
+        }
+
         if (pauseMenuPanel != null)
         {
             pauseMenuPanel.SetActive(show);
+            Debug.Log("[UIManager] PauseMenuPanel activado: " + show);
+            
+            // Si cerramos la pausa, cerramos TAMBIÉN los controles por si acaso
+            if (!show && controlsPanel != null)
+            {
+                controlsPanel.SetActive(false);
+            }
+        }
+        else
+        {
+            Debug.LogError("[UIManager] ¡ERROR! No se pudo encontrar el PauseMenuPanel en el Canvas.");
         }
     }
 

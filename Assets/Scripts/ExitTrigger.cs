@@ -10,13 +10,15 @@ public class ExitTrigger : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
+            Debug.Log($"[ExitTrigger] Jugador intenta salir. ¿Coleccionó todo? {GameManager.instance.HasCollectedAllCoins()}");
+            
             if (GameManager.instance.HasCollectedAllCoins())
             {
                 StartCoroutine("LevelExit");
             }
             else
             {
-                Debug.Log("¡Aún no has recogido todas las monedas!");
+                Debug.Log($"[ExitTrigger] BLOQUEADO: Faltan monedas. Llamando a aviso UI...");
                 UIManager.instance.ShowCoinWarning();
             }
         }
