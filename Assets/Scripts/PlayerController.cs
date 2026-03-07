@@ -1,21 +1,18 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum Controls { mobile,pc}
+public enum Controls { mobile, pc }
 
 public class PlayerController : MonoBehaviour
 {
-
-
     public float moveSpeed = 5f;
     public float jumpForce = 10f;
     public float doubleJumpForce = 8f;
     public LayerMask groundLayer;
     public Transform groundCheck;
-    public float groundCheckRadius = 0.4f; // Aumentado para máxima fiabilidad
+    public float groundCheckRadius = 0.4f;
 
     private Rigidbody2D rb;
     private bool isGroundedBool = false;
@@ -37,6 +34,7 @@ public class PlayerController : MonoBehaviour
     public AudioSource landSound;
     public AudioSource walkSound;
     public AudioSource coinSound;
+    public AudioSource hurtSound;
 
     private Vector3 baseScale = new Vector3(3.0f, 3.0f, 3.0f);
     private int jumpCount = 0;
@@ -46,7 +44,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 playerPosition;
 
     [Header("Ajuste Visual")]
-    public float visualOffsetY = 0f; // Si el muñeco vuela, pon aquí un número negativo (ej: -0.5)
+    public float visualOffsetY = 0f;
 
     private void Start()
     {
@@ -73,21 +71,23 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // Actualizamos la barra de saltos en el UI
         if (UIManager.instance != null && UIManager.instance.jumpSlider != null)
         {
             UIManager.instance.jumpSlider.maxValue = maxJumps;
             UIManager.instance.jumpSlider.value = maxJumps - jumpCount;
         }
 
-        // Ajuste Visual: Mueve los hijos (gráficos) respecto al padre (físicas)
         foreach (Transform child in transform)
         {
-            // No movemos el groundCheck ni otros objetos técnicos, solo los gráficos
             if (child.name != "Ground Check" && child.GetComponent<SpriteRenderer>() != null)
             {
                 child.localPosition = new Vector3(0, visualOffsetY, 0);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            TogglePause();
         }
 
         if (controlmode == Controls.pc && !isPaused)
@@ -131,8 +131,6 @@ public class PlayerController : MonoBehaviour
 
     private void HandleJump()
     {
-        // Eliminamos el bypass de isGroundedBool para que maxJumps sea la ley absoluta.
-        // Mientras estemos en el aire o saltando, jumpCount limitará los saltos.
         if (jumpCount < maxJumps)
         {
             float force = (jumpCount == 0) ? jumpForce : doubleJumpForce;
@@ -146,9 +144,6 @@ public class PlayerController : MonoBehaviour
         if (playeranim == null) return;
         
         bool isMoving = Mathf.Abs(moveX) > 0.1f;
-        
-        // El personaje ahora anima el correr siempre que se mueva, 
-        // y solo detiene la animación si está quieto O ha pasado mucho tiempo en el aire
         playeranim.SetBool("run", isMoving);
         
         if (footsteps != null)
@@ -195,24 +190,17 @@ public class PlayerController : MonoBehaviour
     private bool IsGrounded()
     {
         if (groundCheck == null) return false;
-
-        // QUITAMOS groundLayer: Ahora detectará CUALQUIER objeto que tenga un collider
-        // Esto soluciona el problema de si el usuario se olvidó de poner la "Layer" de suelo.
         Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, groundCheckRadius);
-        
         foreach (var col in colliders)
         {
-            // Ignoramos triggers (como monedas) y cualquier objeto que sea parte del jugador
             if (!col.isTrigger && !col.transform.IsChildOf(transform) && col.gameObject != gameObject)
             {
                 return true;
             }
         }
-        
         return false;
     }
 
-    // Dibujamos el círculo en el editor para que el usuario pueda ajustarlo visualmente
     private void OnDrawGizmosSelected()
     {
         if (groundCheck != null)
@@ -228,10 +216,7 @@ public class PlayerController : MonoBehaviour
         {
             if (HealthManager.instance != null)
             {
-                // Quitamos vida al caer
                 HealthManager.instance.HurtPlayer();
-                
-                // Si aún tiene vida, lo devolvemos a una posición segura (el inicio o checkpoint)
                 if (HealthManager.instance.currentHealth > 0)
                 {
                     transform.position = playerPosition;
@@ -240,24 +225,20 @@ public class PlayerController : MonoBehaviour
             }
             else if (GameManager.instance != null)
             {
-                // Fallback si no hay HealthManager
                 GameManager.instance.Death();
             }
         }
     }
 
-    public void MobileMove(float value)
-    {
-        moveX = value;
-    }
-
-    public void MobileJump()
-    {
-        HandleJump();
-    }
-
+    public void MobileMove(float value) { moveX = value; }
+    public void MobileJump() { HandleJump(); }
     public void Shoot() { }
-
+    public void TogglePause()
+    {
+        isPaused = !isPaused;
+        Time.timeScale = isPaused ? 0f : 1f;
+        if (UIManager.instance != null) UIManager.instance.TogglePauseMenu(isPaused);
+    }
     public void MobileShoot()
     {
         if (Time.time >= nextFireTime)

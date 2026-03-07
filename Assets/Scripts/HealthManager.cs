@@ -23,9 +23,30 @@ public class HealthManager : MonoBehaviour
 
     private void Start()
     {
-        Player = Object.FindFirstObjectByType<PlayerController>().gameObject;
+        // Búsqueda más robusta del jugador
+        PlayerController pc = Object.FindFirstObjectByType<PlayerController>();
+        if (pc == null) pc = GameObject.FindWithTag("Player")?.GetComponent<PlayerController>();
+        
+        if (pc != null)
+        {
+            Player = pc.gameObject;
+        }
+        else
+        {
+            Debug.LogWarning("HealthManager: Esperando al PlayerController...");
+            // Intentar buscar de nuevo en un segundo si falla (opcional, pero ayuda en escenas pesadas)
+            Invoke("FindPlayer", 0.5f);
+        }
+        
         currentHealth = MaxHealth;
         DisplayHearts();
+    }
+
+    private void FindPlayer()
+    {
+        if (Player != null) return;
+        PlayerController pc = Object.FindFirstObjectByType<PlayerController>();
+        if (pc != null) Player = pc.gameObject;
     }
    
   
@@ -55,28 +76,36 @@ public class HealthManager : MonoBehaviour
         
         if (damageEffect != null)
             Instantiate(damageEffect, Player.transform.position, Quaternion.identity);
+
+        // Reproducir sonido de daño
+        PlayerController pc = Player.GetComponent<PlayerController>();
+        if (pc != null && pc.hurtSound != null)
+        {
+            pc.hurtSound.Play();
+        }
     }
 
     public void DisplayHearts()
     {
-        int fullHeartsCount = currentHealth / 2; // Calculate the number of full hearts
-        bool hasHalfHeart = (currentHealth % 2) == 1; // Check if there's a half heart needed
-
         for (int i = 0; i < hearts.Length; i++)
         {
-            if (i < fullHeartsCount)
+            // Cada corazón representa 2 unidades de vida (0 y 1 para el primero, 2 y 3 para el segundo, etc.)
+            // heartIndex * 2 es el umbral para media vida, +1 es para vida completa.
+            int heartThreshold = i * 2;
+
+            if (currentHealth >= heartThreshold + 2)
             {
-                // Heart should be full
+                // Vida suficiente para corazón lleno
                 hearts[i].sprite = FullHeartSprite;
             }
-            else if (hasHalfHeart && i == fullHeartsCount)
+            else if (currentHealth >= heartThreshold + 1)
             {
-                // Heart should be half
+                // Vida suficiente solo para medio corazón
                 hearts[i].sprite = HalfHeartSprite;
             }
             else
             {
-                // Heart should be empty
+                // Sin vida para este corazón
                 hearts[i].sprite = EmptyHeartSprite;
             }
         }

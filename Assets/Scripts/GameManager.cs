@@ -44,8 +44,14 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         UpdateGUI();
-        UIManager.instance.fadeFromBlack = true;
-        playerPosition = playerController.transform.position;
+        if (UIManager.instance != null) UIManager.instance.fadeFromBlack = true;
+
+        if (playerController == null) playerController = Object.FindFirstObjectByType<PlayerController>();
+        
+        if (playerController != null)
+        {
+            playerPosition = playerController.transform.position;
+        }
 
         FindTotalPickups();
     }
@@ -68,8 +74,10 @@ public class GameManager : MonoBehaviour
 
     private void UpdateGUI()
     {
-        coinText.text = coinCount.ToString();
-  
+        if (coinText != null)
+        {
+            coinText.text = coinCount.ToString();
+        }
     }
 
     public void Death()

@@ -22,9 +22,27 @@ public class UIManager : MonoBehaviour
     public float flashDuration = 0.2f;
     public Color flashColor = new Color(1, 0, 0, 0.4f);
 
+    public GameObject pauseMenuPanel;
+
     private void Awake()
     {
         instance = this;
+    }
+
+    public void ResumeGame()
+    {
+        if (playerController != null)
+        {
+            playerController.TogglePause();
+        }
+    }
+
+    public void TogglePauseMenu(bool show)
+    {
+        if (pauseMenuPanel != null)
+        {
+            pauseMenuPanel.SetActive(show);
+        }
     }
 
     public void ShowCoinWarning()
@@ -85,7 +103,7 @@ public class UIManager : MonoBehaviour
 
         if (blackScreen.color.a <= 0f)
         {
-            if(playerController.controlmode == Controls.mobile)
+            if(playerController != null && playerController.controlmode == Controls.mobile)
             {
                 EnableMobileControls();
             }
