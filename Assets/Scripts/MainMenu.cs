@@ -5,8 +5,20 @@ public class MainMenu : MonoBehaviour
 {
     public GameObject controlsPanel;
 
+    private void Start()
+    {
+        // Asegurar que el cursor es visible en el menú principal
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
     private void Update()
     {
+        Debug.Log("MainMenu Update is RUNNING!");
+        // Forzamos el cursor cada frame por si hay un bug en Unity o algo más lo está ocultando
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             CloseControls();

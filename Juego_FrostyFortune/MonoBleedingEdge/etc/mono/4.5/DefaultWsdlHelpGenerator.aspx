@@ -3,7 +3,7 @@
 // DefaultWsdlHelpGenerator.aspx: 
 //
 // Author:
-//   Lluis Sanchez Gual (lluis@ximian.com)
+//   Ismael Vargas Duque
 //
 // (C) 2003 Ximian, Inc.  http://www.ximian.com
 //

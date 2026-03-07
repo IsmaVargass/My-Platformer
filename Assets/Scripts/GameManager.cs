@@ -73,8 +73,8 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0f;
             
             // Asegurar que el cursor sea visible para poder clickear el botón
-            Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             
             Debug.Log("[GameManager] Iniciando con instrucciones. Juego pausado.");
         }
@@ -82,6 +82,10 @@ public class GameManager : MonoBehaviour
         {
             timerRunning = true;
             Time.timeScale = 1f;
+
+            // Asegurar que el cursor desaparezca al empezar sin tutorial
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
 
@@ -92,14 +96,17 @@ public class GameManager : MonoBehaviour
         timerRunning = true;
 
         // Ocultar el cursor para jugar
-        Cursor.visible = false; 
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false; 
         
         Debug.Log("[GameManager] Instrucciones aceptadas. Empezando cronometro.");
     }
 
     private void Update()
     {
+        // FORZAR CURSOR DE FORMA CONSTANTE
+        EnforceCursorState();
+
         if (tutorialPanel != null && tutorialPanel.activeSelf)
         {
             // Detectar click en cualquier lado de la pantalla o la tecla Enter para empezar
@@ -114,6 +121,30 @@ public class GameManager : MonoBehaviour
         {
             timerTime += Time.deltaTime;
             UpdateTimerHUD();
+        }
+    }
+
+    private void EnforceCursorState()
+    {
+        // Revisamos si ALGÚN menú está abierto (Pausa, Muerte, Tutorial, Nivel Completado)
+        bool anyMenuOpen = false;
+
+        if (tutorialPanel != null && tutorialPanel.activeSelf) anyMenuOpen = true;
+        if (deathMenuPanel != null && deathMenuPanel.activeSelf) anyMenuOpen = true;
+        if (levelCompletePanel != null && levelCompletePanel.activeSelf) anyMenuOpen = true;
+        
+        if (UIManager.instance != null && UIManager.instance.pauseMenuPanel != null && UIManager.instance.pauseMenuPanel.activeSelf) 
+            anyMenuOpen = true;
+
+        if (anyMenuOpen)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else if (timerRunning) // Solo si estamos jugando activamente
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
 
@@ -166,6 +197,10 @@ public class GameManager : MonoBehaviour
         {
             // Detener el cronómetro al morir
             timerRunning = false;
+            
+            // Liberar y mostrar cursor INMEDIATAMENTE al morir (antes de que termine el fade a negro)
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
 
             // Disable Mobile Controls
             UIManager.instance.DisableMobileControls();
@@ -222,6 +257,9 @@ public class GameManager : MonoBehaviour
         {
             levelCompletePanel.SetActive(true);
             
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            
             if (leveCompletePanelTitle != null) 
                 leveCompletePanelTitle.text = isNewRecord ? "¡NUEVO RÉCORD!" : "¡ENHORABUENA!";
 
@@ -244,6 +282,8 @@ public class GameManager : MonoBehaviour
         if (deathMenuPanel != null)
         {
             deathMenuPanel.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
         else
         {

@@ -57,6 +57,17 @@ public class UIManager : MonoBehaviour
         {
             pauseMenuPanel.SetActive(show);
             Debug.Log("[UIManager] PauseMenuPanel activado: " + show);
+
+            if (show)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
             
             // Si cerramos la pausa, cerramos TAMBIÉN los controles por si acaso
             if (!show && controlsPanel != null)

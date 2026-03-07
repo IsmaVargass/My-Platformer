@@ -6,6 +6,42 @@
 
 ---
 
+## Evidencias del Proyecto
+
+### 📸 Capturas de Pantalla
+*(Alumno: Sustituye el texto [AQUÍ TU ENLACE] por el enlace o nombre del archivo de tus imágenes)*
+
+![Menú Principal]([AQUÍ TU ENLACE])
+
+Menú de inicio del juego y selección de niveles.
+
+![Gameplay]([AQUÍ TU ENLACE])
+
+Nivel en progreso, mostrando HUD funcional (corazones, monedas, tiempo) y plataformas de Tilemap.
+
+![Menú de Pausa]([AQUÍ TU ENLACE])
+
+Menú de pausa durante el juego.
+
+![Controles]([AQUÍ TU ENLACE])
+
+Pantalla de controles y configuración.
+
+![Muerte]([AQUÍ TU ENLACE])
+
+Pantalla de fin de partida (Game Over).
+
+![Pantalla de Victoria]([AQUÍ TU ENLACE])
+
+Condición de fin alcanzada. Pantalla mostrando el resumen de la partida y el récord.
+
+### 🎥 Vídeo de Gameplay Completo
+*(Alumno: Inserta el enlace a tu vídeo aquí. Recuerda: mínimo 1 minuto, desde el inicio del nivel hasta completarlo)*
+
+📺 **[AQUÍ ENLACE AL VÍDEO COMPLETO]**
+
+---
+
 ## 1. Contexto y Descripción General
 Este documento detalla el diseño y la implementación de un nivel 2D funcional, desarrollado como parte de la evaluación de flujo de trabajo en Unity. El objetivo principal de **Frosty Fortune** es demostrar la integración técnica y estética de sistemas fundamentales: mecánicas de plataformas, física 2D, Tilemaps, gestión de estado mediante C# y una UI pulida.
 
@@ -45,31 +81,6 @@ El juego se rige por un patrón Singleton en el `GameManager` y `UIManager`.
 ### 3.3. Estética y Feedback (Visual y Audio)
 *   **Coherencia de Assets:** Uso de un paquete de assets de estética pixel art invernal limpia. Interfaz con diseño moderno y "premium" (colores sólidos, espaciado amplio, sin sobrecarga).
 *   **Feedback Sonoro:** Implementación de componentes `AudioSource` individuales para eventos clave como saltar, recibir daño, y recoger monedas, mejorando el "*game feel*".
-
----
-
-## 4. Evidencias del Proyecto
-
-### 📸 Capturas de Pantalla
-
-*(Alumno: Sustituye el texto [AQUÍ TU ENLACE] por el enlace o nombre del archivo de tus imágenes)*
-
-![Menú Principal]([AQUÍ TU ENLACE])
-> *Menú de inicio del juego y selección de niveles.*
-
-![Gameplay]([AQUÍ TU ENLACE])
-> *Nivel en progreso, mostrando HUD funcional (corazones, monedas, tiempo) y plataformas de Tilemap.*
-
-![Pantalla de Victoria]([AQUÍ TU ENLACE])
-> *Condición de fin alcanzada. Pantalla mostrando el resumen de la partida y el récord.*
-
----
-
-### 🎥 Vídeo de Gameplay Completo
-
-*(Alumno: Inserta el enlace a tu vídeo aquí. Recuerda: mínimo 1 minuto, desde el inicio del nivel hasta completarlo)*
-
-📺 **[AQUÍ ENLACE AL VÍDEO COMPLETO]**
 
 ---
 
