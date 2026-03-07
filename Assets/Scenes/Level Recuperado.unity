@@ -5197,7 +5197,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_Sprite: {fileID: -2622803937423972883, guid: 1a875d8b3bf70f04b86d60409cd282d7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -7242,7 +7242,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_Sprite: {fileID: -2622803937423972883, guid: 1a875d8b3bf70f04b86d60409cd282d7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -7787,7 +7787,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.58401, y: -1.09006, z: -10}
+  m_LocalPosition: {x: -5.7069216, y: -1.09785, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8419,6 +8419,7 @@ MonoBehaviour:
   landSound: {fileID: 664841630}
   walkSound: {fileID: 664841629}
   coinSound: {fileID: 664841628}
+  hurtSound: {fileID: 0}
   maxJumps: 2
   visualOffsetY: 0
 --- !u!4 &664841624
@@ -22176,7 +22177,7 @@ GameObject:
   - component: {fileID: 994521710}
   - component: {fileID: 994521709}
   m_Layer: 5
-  m_Name: Heart (1)
+  m_Name: UI_Corazon_DERECHA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22498,7 +22499,7 @@ GameObject:
   - component: {fileID: 1130873593}
   - component: {fileID: 1130873592}
   m_Layer: 5
-  m_Name: Heart (2)
+  m_Name: UI_Corazon_CENTRO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23223,7 +23224,7 @@ GameObject:
   - component: {fileID: 1271948703}
   - component: {fileID: 1271948702}
   m_Layer: 5
-  m_Name: Heart
+  m_Name: UI_Corazon_IZQUIERDA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24447,6 +24448,7 @@ RectTransform:
   - {fileID: 468109578}
   - {fileID: 1140359859}
   - {fileID: 556883296}
+  - {fileID: 1886284709}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -24477,6 +24479,7 @@ MonoBehaviour:
   damageFlashImage: {fileID: 0}
   flashDuration: 0.2
   flashColor: {r: 1, g: 0, b: 0, a: 0.4}
+  pauseMenuPanel: {fileID: 0}
 --- !u!1001 &1540975423
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24784,8 +24787,8 @@ MonoBehaviour:
   currentHealth: 0
   hearts:
   - {fileID: 1271948702}
-  - {fileID: 994521709}
   - {fileID: 1130873592}
+  - {fileID: 994521709}
   FullHeartSprite: {fileID: 21300000, guid: 45c70376f652317479598a69cb209e70, type: 3}
   HalfHeartSprite: {fileID: 21300000, guid: b693eb9329bf3b04b89ff8740c18a857, type: 3}
   EmptyHeartSprite: {fileID: 21300000, guid: b693eb9329bf3b04b89ff8740c18a857, type: 3}
@@ -24806,12 +24809,13 @@ MonoBehaviour:
   fadeFromBlack: 0
   blackScreen: {fileID: 556883297}
   fadeSpeed: 2
-  playerController: {fileID: 0}
+  playerController: {fileID: 664841622}
   jumpSlider: {fileID: 0}
   coinWarning: {fileID: 0}
   damageFlashImage: {fileID: 1140359860}
   flashDuration: 0.2
   flashColor: {r: 1, g: 0, b: 0, a: 0.4}
+  pauseMenuPanel: {fileID: 1886284708}
 --- !u!1001 &1571884950
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30462,6 +30466,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1886284708
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1886284709}
+  m_Layer: 0
+  m_Name: PauseMenu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1886284709
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886284708}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1510899810}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2045001871
 PrefabInstance:
