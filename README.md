@@ -9,7 +9,9 @@
 ## Evidencias del Proyecto
 
 ### 📸 Capturas de Pantalla
-*(Alumno: Sustituye el texto [AQUÍ TU ENLACE] por el enlace o nombre del archivo de tus imágenes)*
+
+### 🗺️ Boceto o Layout del Nivel
+![Boceto del Nivel](Assets/images/boceto.png)
 
 ![Menú Principal](Assets/images/menuprincipal.png)
 
@@ -23,6 +25,9 @@ Nivel en progreso, mostrando HUD funcional (corazones, monedas, tiempo) y plataf
 
 Menú de pausa durante el juego.
 
+![Controles](Assets/images/controles.png)
+
+Pantalla de controles y configuración.
 
 
 
@@ -36,7 +41,6 @@ Pantalla de fin de partida (Game Over).
 Condición de fin alcanzada. Pantalla mostrando el resumen de la partida y el récord.
 
 ### 🎥 Vídeo de Gameplay Completo
-*(Alumno: Inserta el enlace a tu vídeo aquí. Recuerda: mínimo 1 minuto, desde el inicio del nivel hasta completarlo)*
 
 📺 **[https://youtu.be/6eXJsJXwSzA](https://youtu.be/6eXJsJXwSzA)**
 
@@ -70,15 +74,19 @@ La dificultad es moderada, penalizando errores concretos:
 ## 3. Implementación Técnica (Unity)
 
 ### 3.1. Escenario y Tilemaps
+*   **Tile Palette:** El entorno se diseñó empleando la herramienta Tile Palette, permitiendo "pintar" y estructurar las plataformas de manera rápida y coherente con el estilo visual.
 *   **Construcción Modular:** Se usaron Tilemaps para pintar el nivel de forma eficiente, separar capas visuales y optimizar el rendimiento.
 *   **Colisiones Optimizadas:** Se empleó `TilemapCollider2D` junto con `CompositeCollider2D`. *Decisión técnica*: El Composite Collider unifica de forma eficiente todas las cajas de colisión individuales en una sola malla, puliendo el movimiento del personaje y evitando atascos entre tiles adyacentes.
 
-### 3.2. Gestión de Estados (GameManager & UIManager)
+### 3.2. Gestión de Escenas (Scene Management)
+*   **Flujo Estructurado:** El proyecto cumple con un flujo cerrado de juego con múltiples escenas. Una escena inicial (`MainMenu`) sirve de transición robusta al nivel de juego utilizando `UnityEngine.SceneManagement`. Esto garantiza un inicio correcto y permite manejar estados de reinicio (Retry).
+
+### 3.3. Gestión de Estados (GameManager & UIManager)
 El juego se rige por un patrón Singleton en el `GameManager` y `UIManager`.
 *   El `GameManager` centraliza: conteo de monedas locales vs totales del mapa (buscadas al Vuelo en el Start), inicio y parada de cronómetro, estado de Game Over y cálculo del **Récord Local** de guardado mediante `PlayerPrefs`.
 *   El `UIManager` gestiona las transiciones visuales (Fade in/out), actualizaciones de barras de vida y paneles de victoria.
 
-### 3.3. Estética y Feedback (Visual y Audio)
+### 3.4. Estética y Feedback (Visual y Audio)
 *   **Coherencia de Assets:** Uso de un paquete de assets de estética pixel art invernal limpia. Interfaz con diseño moderno y "premium" (colores sólidos, espaciado amplio, sin sobrecarga).
 *   **Feedback Sonoro:** Implementación de componentes `AudioSource` individuales para eventos clave como saltar, recibir daño, y recoger monedas, mejorando el "*game feel*".
 

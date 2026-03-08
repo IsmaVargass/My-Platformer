@@ -2277,7 +2277,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -3092,7 +3092,11 @@ MonoBehaviour:
   levelCompletePanel: {fileID: 0}
   leveCompletePanelTitle: {fileID: 0}
   levelCompleteCoins: {fileID: 0}
+  currentLevelTimeText: {fileID: 0}
+  bestLevelTimeText: {fileID: 0}
+  timerHUDText: {fileID: 0}
   deathMenuPanel: {fileID: 1058546135}
+  tutorialPanel: {fileID: 0}
 --- !u!4 &1461766793
 Transform:
   m_ObjectHideFlags: 0
