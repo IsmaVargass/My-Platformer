@@ -11,34 +11,34 @@
 ### 📸 Capturas de Pantalla
 *(Alumno: Sustituye el texto [AQUÍ TU ENLACE] por el enlace o nombre del archivo de tus imágenes)*
 
-![Menú Principal]([AQUÍ TU ENLACE])
+![Menú Principal](Assets/images/menuprincipal.png)
 
 Menú de inicio del juego y selección de niveles.
 
-![Gameplay]([AQUÍ TU ENLACE])
+![Gameplay](Assets/images/gameplay.png)
 
 Nivel en progreso, mostrando HUD funcional (corazones, monedas, tiempo) y plataformas de Tilemap.
 
-![Menú de Pausa]([AQUÍ TU ENLACE])
+![Menú de Pausa](Assets/images/pausa.png)
 
 Menú de pausa durante el juego.
 
-![Controles]([AQUÍ TU ENLACE])
 
-Pantalla de controles y configuración.
 
-![Muerte]([AQUÍ TU ENLACE])
+
+
+![Muerte](Assets/images/muerte.png)
 
 Pantalla de fin de partida (Game Over).
 
-![Pantalla de Victoria]([AQUÍ TU ENLACE])
+![Pantalla de Victoria](Assets/images/victoria.png)
 
 Condición de fin alcanzada. Pantalla mostrando el resumen de la partida y el récord.
 
 ### 🎥 Vídeo de Gameplay Completo
 *(Alumno: Inserta el enlace a tu vídeo aquí. Recuerda: mínimo 1 minuto, desde el inicio del nivel hasta completarlo)*
 
-📺 **[AQUÍ ENLACE AL VÍDEO COMPLETO]**
+📺 **[https://youtu.be/6eXJsJXwSzA](https://youtu.be/6eXJsJXwSzA)**
 
 ---
 
