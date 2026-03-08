@@ -90,6 +90,11 @@ El juego se rige por un patrón Singleton en el `GameManager` y `UIManager`.
 *   **Coherencia de Assets:** Uso de un paquete de assets de estética pixel art invernal limpia. Interfaz con diseño moderno y "premium" (colores sólidos, espaciado amplio, sin sobrecarga).
 *   **Feedback Sonoro:** Implementación de componentes `AudioSource` individuales para eventos clave como saltar, recibir daño, y recoger monedas, mejorando el "*game feel*".
 
+*Proyecto final comprimido en formato .zip.*
+
 ---
 
-*Proyecto final comprimido en formato .zip.*
+## 4. Documentación Adicional
+Para más detalles sobre el proceso creativo y el desglose de mecánicas, puedes consultar el documento de diseño adjunto en formato PDF:
+
+📄 **[Documento de Diseño (PDF)](FrostyFortune_Documentacion.pdf)**
